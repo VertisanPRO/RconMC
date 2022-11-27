@@ -227,7 +227,7 @@ if ($user->hasPermission('admincp.rconmc')) {
 
 $server_list = DB::getInstance()->get('rcon_mc', ['id', '<>', 0])->results();
 $server_list_array = [];
-if (count($server_list)) {
+if (isset($server_list) && count($server_list)) {
     foreach ($server_list as $server) {
         if ($user->hasPermission('admincp.rconmc')) {
             $server_list_array[] = [
@@ -256,6 +256,7 @@ if (count($server_list)) {
     ]);
 } else {
     $smarty->assign([
+        'SERVER_LIST' => $server_list_array,
         'NO_SERVER' => $RconMCLanguage->get('general', 'no_servers')
     ]);
 }
