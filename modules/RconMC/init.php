@@ -9,9 +9,9 @@
  *  RconMC By VertisanPRO
  */
 
-$RconMCLanguage = new Language(ROOT_PATH . '/modules/' . $INFO_MODULE['name'] . '/language', LANGUAGE);
+$RconMCLanguage = new Language(ROOT_PATH . '/modules/' . 'RconMC' . '/language', LANGUAGE);
 $GLOBALS['RconMCLanguage'] = $RconMCLanguage;
 
-require_once(ROOT_PATH . '/modules/' . $INFO_MODULE['name'] . '/module.php');
+require_once(ROOT_PATH . '/modules/' . 'RconMC' . '/module.php');
 
 $module = new RconMC_Module($language, $pages);
