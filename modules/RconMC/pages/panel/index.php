@@ -2,7 +2,7 @@
 /*
  *  Made by Samerton
  *  https://github.com/NamelessMC/Nameless/tree/v2/
- *  NamelessMC version 2.0.0-pr7
+ *  NamelessMC version 2.1.0
  *
  *  License: MIT
  *
@@ -46,7 +46,6 @@ const PANEL_PAGE = 'rcon_mc_items';
 require_once(ROOT_PATH . '/core/templates/backend_init.php');
 require_once(ROOT_PATH . '/modules/RconMC/classes/Rcon.php');
 
-
 $smarty->assign([
     'SUBMIT' => $language->get('general', 'submit'),
     'YES' => $language->get('general', 'yes'),
@@ -64,16 +63,12 @@ $smarty->assign([
 
 $template_file = 'RconMC/index.tpl';
 
-
 if ($user->hasPermission('admincp.rconmc')) {
-
     if (!isset($_GET['action'])) {
-
         if (Input::exists()) {
             $errors = [];
             try {
                 if (Token::check(Input::get('token'))) {
-
                     $validation = Validate::check($_POST, [
                         'server_name' => [
                             'required' => true,
@@ -96,17 +91,14 @@ if ($user->hasPermission('admincp.rconmc')) {
                             'max' => 10
                         ]
                     ]);
-
                     if ($validation->passed()) {
                         try {
-
                             DB::getInstance()->insert('rcon_mc', [
                                 'rcon_name' => htmlspecialchars(Input::get('server_name')),
                                 'rcon_ip' => htmlspecialchars(Input::get('server_ip')),
                                 'rcon_port' => htmlspecialchars(Input::get('server_port')),
                                 'rcon_pass' => htmlspecialchars(Input::get('server_pass')),
                             ]);
-
                             Session::flash('staff_rcon', $RconMCLanguage->get('general', 'new_server_successfully'));
                         } catch (Exception $e) {
                             $errors[] = $e->getMessage();
@@ -123,9 +115,7 @@ if ($user->hasPermission('admincp.rconmc')) {
         }
     } else {
         switch ($_GET['action']) {
-
             case 'edit':
-
                 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
                     Redirect::to(URL::build('/panel/rconmc'));
                 }
@@ -133,14 +123,11 @@ if ($user->hasPermission('admincp.rconmc')) {
                 if (!count($edit_server)) {
                     Redirect::to(URL::build('/panel/rconmc'));
                 }
-
                 $edit_server = $edit_server[0];
-
                 if (Input::exists()) {
                     $errors = [];
                     try {
                         if (Token::check(Input::get('token'))) {
-
                             $validation = Validate::check($_POST, [
                                 'server_name' => [
                                     'required' => true,
@@ -163,18 +150,14 @@ if ($user->hasPermission('admincp.rconmc')) {
                                     'max' => 10
                                 ]
                             ]);
-
                             if ($validation->passed()) {
                                 try {
-
                                     DB::getInstance()->update('rcon_mc', $edit_server->id, [
                                         'rcon_name' => htmlspecialchars(Input::get('server_name')),
                                         'rcon_ip' => htmlspecialchars(Input::get('server_ip')),
                                         'rcon_port' => htmlspecialchars(Input::get('server_port')),
                                         'rcon_pass' => htmlspecialchars(Input::get('server_pass')),
                                     ]);
-
-
                                     Session::flash('staff_rcon', $RconMCLanguage->get('general', 'edit_server_successfully'));
                                     Redirect::to(URL::build('/panel/rconmc'));
                                 } catch (Exception $e) {
@@ -190,7 +173,6 @@ if ($user->hasPermission('admincp.rconmc')) {
                         // Error
                     }
                 }
-
                 $smarty->assign([
                     'EDIT_SERVER' => $RconMCLanguage->get('general', 'server_edit_title'),
                     'BACK_LINK' => URL::build('/panel/rconmc'),
@@ -199,26 +181,19 @@ if ($user->hasPermission('admincp.rconmc')) {
                     'EDIT_PORT' => Output::getClean($edit_server->rcon_port),
                     'EDIT_PASS' => Output::getClean($edit_server->rcon_pass)
                 ]);
-
-
                 $template_file = 'RconMC/edit_rcon_.tpl';
-
                 break;
-
             case 'delete':
                 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                     try {
-
                         DB::getInstance()->delete('rcon_mc', ['id', '=', $_GET['id']]);
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
-
                     Session::flash('staff_rcon', $RconMCLanguage->get('general', 'deleted_successfully'));
                     Redirect::to(URL::build('/panel/rconmc'));
                 }
                 break;
-
             default:
                 Redirect::to(URL::build('/panel/rconmc'));
         }
@@ -260,8 +235,6 @@ if (isset($server_list) && count($server_list)) {
         'NO_SERVER' => $RconMCLanguage->get('general', 'no_servers')
     ]);
 }
-
-
 
 // Load modules + template
 Module::loadPage($user, $pages, $cache, $smarty, [$navigation, $cc_nav, $staffcp_nav], $widgets, $template);

@@ -2,7 +2,7 @@
 /*
  *  Made by Samerton
  *  https://github.com/NamelessMC/Nameless/tree/v2/
- *  NamelessMC version 2.0.0-pr7
+ *  NamelessMC version 2.1.0
  *
  *  License: MIT
  *
@@ -14,16 +14,16 @@ class RconMC_Module extends Module
 
     private $_language, $RconMCLanguage;
 
-    public function __construct($language, $pages, $INFO_MODULE)
+    public function __construct($language, $pages)
     {
         $this->_language = $language;
 
         $this->RconMCLanguage = $GLOBALS['RconMCLanguage'];
 
-        $name = $INFO_MODULE['name'];
-        $author = $INFO_MODULE['author'];
-        $module_version = $INFO_MODULE['module_ver'];
-        $nameless_version = $INFO_MODULE['nml_ver'];
+        $name = 'RconMC';
+        $author = '<a href="https://github.com/VertisanPRO" target="_blank" rel="nofollow noopener">VertisanPRO</a>';
+        $module_version = '1.3.1';
+        $nameless_version = '2.1.0';
         parent::__construct($this, $name, $author, $module_version, $nameless_version);
 
         $pages->add('RconMC', '/panel/rconmc', 'pages/panel/index.php');
@@ -94,7 +94,7 @@ class RconMC_Module extends Module
 
 
 
-            $rcon_mc_name =  $this->RconMCLanguage->get('general', 'rcon_name');
+            $rcon_mc_name = $this->RconMCLanguage->get('general', 'rcon_name');
 
             if ($user->hasPermission('admincp.rconmc') or $user->hasPermission('admincp.rcon.veiw')) {
                 $cache->setCache('panel_sidebar');
@@ -118,7 +118,8 @@ class RconMC_Module extends Module
         }
     }
 
-    public function getDebugInfo(): array {
-        return[];
+    public function getDebugInfo(): array
+    {
+        return [];
     }
 }

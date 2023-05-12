@@ -87,7 +87,7 @@ class Rcon
     public function disconnect()
     {
         if ($this->socket) {
-                    fclose($this->socket);
+            fclose($this->socket);
         }
     }
 
@@ -111,7 +111,7 @@ class Rcon
     public function sendCommand($command)
     {
         if (!$this->isConnected()) {
-                    return false;
+            return false;
         }
 
         // send command packet
@@ -164,23 +164,23 @@ class Rcon
     private function writePacket($packetId, $packetType, $packetBody)
     {
         /*
-		Size			32-bit little-endian Signed Integer	 	Varies, see below.
-		ID				32-bit little-endian Signed Integer		Varies, see below.
-		Type	        32-bit little-endian Signed Integer		Varies, see below.
-		Body		    Null-terminated ASCII String			Varies, see below.
-		Empty String    Null-terminated ASCII String			0x00
-		*/
+        Size			32-bit little-endian Signed Integer	 	Varies, see below.
+        ID				32-bit little-endian Signed Integer		Varies, see below.
+        Type	        32-bit little-endian Signed Integer		Varies, see below.
+        Body		    Null-terminated ASCII String			Varies, see below.
+        Empty String    Null-terminated ASCII String			0x00
+        */
 
         //create packet
         $packet = pack('VV', $packetId, $packetType);
-        $packet = $packet.$packetBody."\x00";
-        $packet = $packet."\x00";
+        $packet = $packet . $packetBody . "\x00";
+        $packet = $packet . "\x00";
 
         // get packet size.
         $packet_size = strlen($packet);
 
         // attach size to packet.
-        $packet = pack('V', $packet_size).$packet;
+        $packet = pack('V', $packet_size) . $packet;
 
         // write packet.
         fwrite($this->socket, $packet, strlen($packet));

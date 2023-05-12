@@ -2,7 +2,7 @@
 /*
  *  Made by Samerton
  *  https://github.com/NamelessMC/Nameless/tree/v2/
- *  NamelessMC version 2.0.0-pr7
+ *  NamelessMC version 2.1.0
  *
  *  License: MIT
  *
@@ -13,11 +13,9 @@ $RconMCLanguage = $GLOBALS['RconMCLanguage'];
 
 if ($user->isLoggedIn()) {
     if (!$user->canViewStaffCP()) {
-
         Redirect::to(URL::build('/'));
     }
     if (!$user->isAdmLoggedIn()) {
-
         Redirect::to(URL::build('/panel/auth'));
     } else {
         if (!$user->hasPermission('admincp.rconmc')) {
@@ -27,7 +25,6 @@ if ($user->isLoggedIn()) {
         }
     }
 } else {
-
     Redirect::to(URL::build('/login'));
 }
 
@@ -35,32 +32,21 @@ const PAGE = 'panel';
 const PARENT_PAGE = 'rcon_mc_items';
 const PANEL_PAGE = 'rcon_mc_items';
 
-
 require_once(ROOT_PATH . '/modules/RconMC/classes/Rcon.php');
 require_once(ROOT_PATH . '/core/templates/backend_init.php');
 
-
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-
     if (!is_numeric($_GET['id'])) {
         Redirect::to(URL::build('/panel/rconmc'));
     }
-
     if ($cache->isCached('rcon_cmd_btn')) {
         $cmd_btn = $cache->retrieve('rcon_cmd_btn');
     } else {
         $cmd_btn = [];
     }
-
-
-
-    // Add BTN
     if (isset($_POST['cmd_name'])) {
-
         try {
             if (Token::check($_POST['token'])) {
-
-
                 $cmd_btn[$_POST['cmd_name']] = $_POST['command'];
                 $cache->store('rcon_cmd_btn', $cmd_btn);
                 Redirect::to(URL::build('/panel/rconmc/server', 'action=rcon&id=' . $_GET['id']));
@@ -71,10 +57,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             // Error
         }
     }
-
-    // Remove BTN
     if (isset($_POST['btn_remove'])) {
-
         try {
             if (Token::check($_POST['token'])) {
                 unset($cmd_btn[$_POST['btn_remove']]);
@@ -87,32 +70,21 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             // Error
         }
     }
-
-
-
     $query_server = DB::getInstance()->get('rcon_mc', ['id', '=', $_GET['id']])->results();
     if (!count($query_server)) {
         Redirect::to(URL::build('/panel/rconmc'));
     }
-
     $query_server = $query_server[0];
-
     $host = Output::getClean($query_server->rcon_ip);
     $port = Output::getClean($query_server->rcon_port);
     $password = Output::getClean($query_server->rcon_pass);
     $timeout = 3;
-
-
-
     if (isset($_POST['cmd_mc'])) {
         try {
             if (Token::check($_POST['token'])) {
-
                 $response = [];
                 $rcon = new Rcon($host, $port, $password, $timeout);
-
                 $command = $_POST['cmd_mc'];
-
                 if (empty($command)) {
                     $response['status'] = 'error';
                     $response['error_label'] = $RconMCLanguage->get('general', 'error_commands_label');
@@ -123,8 +95,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                         $response['status'] = 'success';
                         $response['command'] = $_POST['cmd_mc'];
                         $response['response'] = $rcon->get_response();
-
-
                         $response['success_status'] = $RconMCLanguage->get('general', 'success_send_command');
                     } else {
                         $response['status'] = 'error';
@@ -166,14 +136,11 @@ $smarty->assign([
     'TPS' => $RconMCLanguage->get('general', 'tps')
 ]);
 
-
 $template_file = 'RconMC/rcon.tpl';
-
 
 // Load modules + template
 Module::loadPage($user, $pages, $cache, $smarty, [$navigation, $cc_nav, $staffcp_nav], $widgets, $template);
 $template->onPageLoad();
-
 
 if (isset($response))
     $smarty->assign([
